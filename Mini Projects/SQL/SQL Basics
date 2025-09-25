@@ -358,6 +358,170 @@ Fatima Khan	HR	Delhi
 Ravi Kumar	Finance	Mumbai
 Arjun Singh	Finance	Mumbai
 
+								SQL window function
+Create a table
+
+CREATE TABLE Sales (
+    SaleID INT,
+    Employee VARCHAR(50),
+    Region VARCHAR(50),
+    SalesAmount INT
+);
+
+INSERT INTO Sales (SaleID, Employee, Region, SalesAmount) VALUES
+(1, 'Alice',   'North', 500),
+(2, 'Bob',     'North', 700),
+(3, 'Charlie', 'North', 700),
+(4, 'David',   'South', 600),
+(5, 'Emma',    'South', 600),
+(6, 'Frank',   'South', 800),
+(7, 'Grace',   'East',  750),
+(8, 'Helen',   'East',  750),
+(9, 'Ivy',     'East',  650);
+
+1.Row_Nnumber()
+Order by
+
+select employee,region,salesamount, 
+row_number( ) over(order by salesamount desc) as row_num  
+from Sales; 
+
+Result
+employee	region	salesamount	row_num
+Frank	South	800	1
+Grace	East	750	2
+Helen	East	750	3
+Bob	North	700	4
+Charlie	North	700	5
+Ivy	East	650	6
+David	South	600	7
+Emma	South	600	8
+Alice	North	500	9
+
+Partition by and order by
+
+
+select employee,region,salesamount, 
+row_number( ) over(partition by region order by salesamount desc) as row_num  
+from Sales; 
+
+Result
+employee	region	salesamount	row_num
+Grace	East	750	1
+Helen	East	750	2
+Ivy	East	650	3
+Bob	North	700	1
+Charlie	North	700	2
+Alice	North	500	3
+Frank	South	800	1
+David	South	600	2
+Emma	South	600	3
+
+2.Rank()
+Order by
+
+ select employee, region , salesamount, 
+ rank() over(order by salesamount desc) as ranks 
+ from Sales; 
+
+Result
+employee	region	salesamount	ranks
+Frank	South	800	1
+Grace	East	750	2
+Helen	East	750	2
+Bob	North	700	4
+Charlie	North	700	4
+Ivy	East	650	6
+David	South	600	7
+Emma	South	600	7
+Alice	North	500	9
+
+Partition by and order by
+
+select employee, region , salesamount, 
+rank() over (partition by region order by salesamount desc) as ranks 
+from Sales;
+
+Result
+employee	region	salesamount	ranks
+Grace	East	750	1
+Helen	East	750	1
+Ivy	East	650	3
+Bob	North	700	1
+Charlie	North	700	1
+Alice	North	500	3
+Frank	South	800	1
+David	South	600	2
+Emma	South	600	2
+
+3.Dense_Rank()
+
+select employee, region , salesamount, 
+Dense_Rank() over(partition by region order by salesamount desc) as drank  
+from Sales; 
+
+Result
+employee	region	salesamount	drank
+Grace	East	750	1
+Helen	East	750	1
+Ivy	East	650	2
+Bob	North	700	1
+Charlie	North	700	1
+Alice	North	500	2
+Frank	South	800	1
+David	South	600	2
+Emma	South	600	2
+
+4.Find Top 1 Employee per Region
+
+with RS as( 
+select employee, region, salesamount, 
+row_number ( )  over (partition by region order by salesamount desc)as rownum  
+from Sales
+	)
+select * from RS 
+where rownum=1; 
+
+Result
+employee	region	salesamount	rownum
+Grace	East	750	1
+Bob	North	700	1
+Frank	South	800	1
+
+5.Find All Top Performers per Region
+
+with RS as( 
+select employee, region, salesamount, 
+rank() over (partition by region order by salesamount desc) as ranks
+from Sales )
+select * from RS 
+where ranks=1; 
+
+Result
+employee	region	salesamount	ranks
+Grace	East	750	1
+Helen	East	750	1
+Bob	North	700	1
+Charlie	North	700	1
+Frank	South	800	1
+
+6.Try writing a query that shows only the 2nd best performer per region using DENSE_RANK().
+
+with Sal as (
+select employee, region, salesamount, 
+dense_rank() over(partition by region order by salesamount desc)as drank  
+from Sales )
+select * from Sal 
+where drank =2;
+
+Result
+employee	region	salesamount	drank
+Ivy	East	650	2
+Alice	North	500	2
+David	South	600	2
+Emma	South	600	2
+
+
 
 
 

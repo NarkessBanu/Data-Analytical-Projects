@@ -330,6 +330,35 @@ HR	2
 Finance	2
 IT	3
 
+6.Find highest paid employee in each department (with JOIN + GROUP BY)
+
+ select d.dept_name,max(e.salary) from employees e join departments d 
+ on e. dept_id = d. dept_id 
+ group by d. dept_name; 
+
+Result
+dept_name	max(e.salary)
+HR	37000
+Finance	48000
+IT	60000
+
+7.Employee list with department location
+
+ select e.name,d.dept_name,d.location from employees e inner join departments d 
+ on e. dept_id = d. dept_id 
+ order by d. location; 
+
+Result
+name	dept_name	location
+Maya Iyer	IT	Bengaluru
+John Doe	IT	Bengaluru
+Priya Sharma	IT	Bengaluru
+Asha Rao	HR	Delhi
+Fatima Khan	HR	Delhi
+Ravi Kumar	Finance	Mumbai
+Arjun Singh	Finance	Mumbai
+
+
 
 
  

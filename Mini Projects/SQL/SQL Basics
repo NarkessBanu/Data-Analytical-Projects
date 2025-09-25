@@ -1,0 +1,285 @@
+# SQL Basics 🚀
+
+## Creating a Table
+```sql
+CREATE TABLE employees (
+  emp_id INT PRIMARY KEY, 
+  name VARCHAR(50), 
+  department VARCHAR(30), 
+  salary INT, 
+  hire_date DATE
+);
+Result Structure
+
+emp_id	name	department	salary	hire_date
+
+Insert Values into Table
+sql
+Copy code
+INSERT INTO employees (emp_id, name, department, salary, hire_date) VALUES
+(1, 'Asha Rao', 'HR', 35000, '2021-05-12'),
+(2, 'Ravi Kumar', 'Finance', 42000, '2020-03-20'),
+(3, 'Maya Iyer', 'IT', 55000, '2022-07-15'),
+(4, 'John Doe', 'IT', 60000, '2019-11-01'),
+(5, 'Fatima Khan', 'HR', 37000, '2023-01-10'),
+(6, 'Arjun Singh', 'Finance', 48000, '2021-09-05'),
+(7, 'Priya Sharma', 'IT', 52000, '2020-12-18');
+Result
+
+emp_id	name	department	salary	hire_date
+1	Asha Rao	HR	35000	2021-05-12
+2	Ravi Kumar	Finance	42000	2020-03-20
+3	Maya Iyer	IT	55000	2022-07-15
+4	John Doe	IT	60000	2019-11-01
+5	Fatima Khan	HR	37000	2023-01-10
+6	Arjun Singh	Finance	48000	2021-09-05
+7	Priya Sharma	IT	52000	2020-12-18
+
+Select a Particular Column
+sql
+Copy code
+SELECT name, department, salary FROM employees;
+Result
+
+name	department	salary
+Asha Rao	HR	35000
+Ravi Kumar	Finance	42000
+Maya Iyer	IT	55000
+John Doe	IT	60000
+Fatima Khan	HR	37000
+Arjun Singh	Finance	48000
+Priya Sharma	IT	52000
+
+Filtering Using WHERE
+sql
+Copy code
+SELECT name, department, salary 
+FROM employees 
+WHERE department = 'IT';
+Result
+
+name	department	salary
+Maya Iyer	IT	55000
+John Doe	IT	60000
+Priya Sharma	IT	52000
+
+Comparing with Operators
+sql
+Copy code
+SELECT * FROM employees 
+WHERE salary > 45000;
+Result
+
+emp_id	name	department	salary	hire_date
+3	Maya Iyer	IT	55000	2022-07-15
+4	John Doe	IT	60000	2019-11-01
+6	Arjun Singh	Finance	48000	2021-09-05
+7	Priya Sharma	IT	52000	2020-12-18
+
+Sorting
+sql
+Copy code
+SELECT name, department, salary 
+FROM employees 
+ORDER BY salary DESC;
+Result
+
+name	department	salary
+John Doe	IT	60000
+Maya Iyer	IT	55000
+Priya Sharma	IT	52000
+Arjun Singh	Finance	48000
+Ravi Kumar	Finance	42000
+Fatima Khan	HR	37000
+Asha Rao	HR	35000
+
+Fetch First 5 Records
+sql
+Copy code
+SELECT name, department, salary 
+FROM employees 
+LIMIT 5;
+Result
+
+name	department	salary
+Asha Rao	HR	35000
+Ravi Kumar	Finance	42000
+Maya Iyer	IT	55000
+John Doe	IT	60000
+Fatima Khan	HR	37000
+
+Mini Task 📝
+Get all employees where Salary > 55000 in IT
+
+sql
+Copy code
+SELECT name, department, salary 
+FROM employees 
+WHERE department = 'IT' AND salary >= 55000;
+Result
+
+name	department	salary
+Maya Iyer	IT	55000
+John Doe	IT	60000
+
+Distinct Departments
+sql
+Copy code
+SELECT DISTINCT(department) FROM employees;
+Result
+
+department
+HR
+Finance
+IT
+
+Hire Date Between
+sql
+Copy code
+SELECT name, department 
+FROM employees 
+WHERE hire_date BETWEEN '2021-01-01' AND '2023-12-31';
+Result
+
+name	department
+Asha Rao	HR
+Maya Iyer	IT
+Fatima Khan	HR
+Arjun Singh	Finance
+
+Aggregation
+Min & Max
+sql
+Copy code
+SELECT MAX(salary) AS Highest_Salary, 
+       MIN(salary) AS Lowest_Salary 
+FROM employees;
+Result
+
+Highest_Salary	Lowest_Salary
+60000	35000
+
+Sum, Avg & Count
+sql
+Copy code
+SELECT COUNT(name) AS Total_emp, 
+       SUM(salary) AS Total_salary, 
+       ROUND(AVG(salary)) AS Avg_salary 
+FROM employees;
+Result
+
+Total_emp	Total_salary	Avg_salary
+7	329000	47000
+
+Group By
+sql
+Copy code
+SELECT department, COUNT(name), ROUND(AVG(salary)) AS Avg_salary 
+FROM employees 
+GROUP BY department;
+Result
+
+department	count(name)	Avg_salary
+HR	2	36000
+Finance	2	45000
+IT	3	55667
+
+HAVING Clause
+sql
+Copy code
+SELECT department, ROUND(AVG(salary)) AS Avg_salary 
+FROM employees 
+GROUP BY department 
+HAVING AVG(salary) > 40000;
+Result
+
+department	Avg_salary
+Finance	45000
+IT	55667
+
+SQL Joins 🔗
+Inner Join
+sql
+Copy code
+SELECT e.name, d.dept_name 
+FROM employees e 
+INNER JOIN departments d 
+ON e.dept_id = d.dept_id;
+Result
+
+name	dept_name
+Asha Rao	HR
+Fatima Khan	HR
+Ravi Kumar	Finance
+Arjun Singh	Finance
+Maya Iyer	IT
+John Doe	IT
+Priya Sharma	IT
+
+Left Join
+sql
+Copy code
+SELECT e.name, d.dept_name 
+FROM employees e 
+LEFT JOIN departments d 
+ON e.dept_id = d.dept_id;
+Result
+
+name	dept_name
+Asha Rao	HR
+Ravi Kumar	Finance
+Maya Iyer	IT
+John Doe	IT
+Fatima Khan	HR
+Arjun Singh	Finance
+Priya Sharma	IT
+
+Right Join
+sql
+Copy code
+SELECT e.name, d.dept_name 
+FROM employees e 
+RIGHT JOIN departments d 
+ON e.dept_id = d.dept_id;
+Result
+
+name	dept_name
+Asha Rao	HR
+Fatima Khan	HR
+Ravi Kumar	Finance
+Arjun Singh	Finance
+Maya Iyer	IT
+John Doe	IT
+Priya Sharma	IT
+NULL	Marketing
+
+Employees in IT
+sql
+Copy code
+SELECT e.name, d.dept_name 
+FROM employees e 
+INNER JOIN departments d 
+ON e.dept_id = d.dept_id 
+WHERE d.dept_name = 'IT';
+Result
+
+name	dept_name
+Maya Iyer	IT
+John Doe	IT
+Priya Sharma	IT
+
+Count Employees per Department
+sql
+Copy code
+SELECT d.dept_name, COUNT(d.dept_name) 
+FROM employees e 
+LEFT JOIN departments d 
+ON e.dept_id = d.dept_id 
+GROUP BY d.dept_name;
+Result
+
+dept_name	count(d.dept_name)
+HR	2
+Finance	2
+IT	3
+
